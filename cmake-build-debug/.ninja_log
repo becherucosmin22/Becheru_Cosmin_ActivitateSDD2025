@@ -1,0 +1,5 @@
+# ninja log v5
+0	142	1746557689697897343	CMakeFiles/Learning.dir/Vector/v1.c.o	67860fd02f531165
+142	225	1746557689780487107	Learning	29fd0a9b2f4f3636
+1	36	1746557888796972470	CMakeFiles/Learning.dir/ListaSimpla/ls1.c.o	94113a480425f019
+1	36	1746557888796974553	CMakeFiles/Learning.dir/Matrice/m1.c.o	630cac8cf3d1253a
