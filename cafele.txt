@@ -1,0 +1,10 @@
+1,Espresso,8.5,A
+2,Latte,12.0,B
+3,Cappuccino,10.0,A
+4,Americano,9.0,C
+5,Macchiato,11.5,B
+6,Mocha,13.0,A
+7,FlatWhite,12.5,B
+8,Cortado,10.5,C
+9,IrishCoffee,15.0,A
+10,Affogato,14.0,B
