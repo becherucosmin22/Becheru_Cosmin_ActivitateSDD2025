@@ -1,0 +1,7 @@
+2,Latte,12.00,B
+5,Macchiato,11.50,B
+6,Mocha,13.00,A
+7,FlatWhite,12.50,B
+8,Cortado,10.50,C
+9,IrishCoffee,15.00,A
+10,Affogato,14.00,B

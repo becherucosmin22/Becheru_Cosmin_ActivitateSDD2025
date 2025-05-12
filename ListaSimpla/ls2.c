@@ -65,7 +65,49 @@ Cafea* citireVectorCafeleFisier(const char* numeFisier, int* nrCafeleCitite) {
 	fclose(file);
 	return cafele;
 }
+Cafea* cafelePestePrag(Cafea* cafele, int nrCafele, float prag, int* nrCafeleScumpe) {
+    *nrCafeleScumpe = 0;
 
+    // Numărăm câte trec pragul
+    for (int i = 0; i < nrCafele; i++) {
+        if (cafele[i].pret > prag) {
+            (*nrCafeleScumpe)++;
+        }
+    }
+
+    // Alocăm vector nou
+    Cafea* rezultat = (Cafea*)malloc(sizeof(Cafea) * (*nrCafeleScumpe));
+    int k = 0;
+    for (int i = 0; i < nrCafele; i++) {
+        if (cafele[i].pret > prag) {
+            rezultat[k].id = cafele[i].id;
+            rezultat[k].pret = cafele[i].pret;
+            rezultat[k].calificativ = cafele[i].calificativ;
+            rezultat[k].nume = (char*)malloc(strlen(cafele[i].nume) + 1);
+            strcpy(rezultat[k].nume, cafele[i].nume);
+            k++;
+        }
+    }
+
+    return rezultat;
+}
+void scrieCafeleInFisier(const char* numeFisier, Cafea* cafele, int nrCafele) {
+    FILE* file = fopen(numeFisier, "w");
+    if (!file) {
+        printf("Eroare: Nu s-a putut deschide fisierul %s pentru scriere.\n", numeFisier);
+        return;
+    }
+
+    for (int i = 0; i < nrCafele; i++) {
+        fprintf(file, "%d,%s,%.2f,%c\n",
+                cafele[i].id,
+                cafele[i].nume,
+                cafele[i].pret,
+                cafele[i].calificativ);
+    }
+
+    fclose(file);
+}
 void dezalocareVectorCafele(Cafea** vector, int* nrCafele) {
 	for (int i = 0; i < *nrCafele; i++) {
 		if ((*vector)[i].nume != NULL) {
@@ -81,7 +123,23 @@ int main() {
     int nrCafele = 0;
     Cafea * cafele = citireVectorCafeleFisier("cafele.txt", &nrCafele);
     afisareVector(cafele, nrCafele);
-    dezalocareVectorCafele(&cafele, &nrCafele);
+    int nrCafeleScumpe = 0;
+    float prag = 10.0;
+    Cafea* cafeleScumpe = cafelePestePrag(cafele, nrCafele, prag, &nrCafeleScumpe);
 
+    if (nrCafeleScumpe > 0) {
+        scrieCafeleInFisier("cafeleScumpe.txt", cafeleScumpe, nrCafeleScumpe);
+        printf("Am salvat %d cafele scumpe in fisier.\n", nrCafeleScumpe);
+    } else {
+        printf("Nu exista cafele peste pragul de %.2f.\n", prag);
+    }
+
+// Eliberăm memoria pentru vectorul nou
+    for (int i = 0; i < nrCafeleScumpe; i++) {
+        free(cafeleScumpe[i].nume);
+    }
+    free(cafeleScumpe);
+
+    dezalocareVectorCafele(&cafele, &nrCafele);
 	return 0;
 }
