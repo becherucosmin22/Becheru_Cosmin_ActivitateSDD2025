@@ -126,8 +126,16 @@ void afisareInOrdineSRD(Nod* radacina) {
 //	}
 //}
 
-void dezalocareArboreDeMasini(/*arbore de masini*/) {
+void dezalocareArboreDeMasini(Nod ** arbore) {
 	//sunt dezalocate toate masinile si arborele de elemente
+    if (*arbore) {
+        dezalocareArboreDeMasini(&(*arbore)->st);
+        dezalocareArboreDeMasini(&(*arbore)->dr);
+        free((*arbore)->info.numeSofer);
+        free((*arbore)->info.model);
+        free(*arbore);
+        (*arbore)=NULL;
+    }
 }
 
 Masina getMasinaByID(Nod *radacina, int id) {
@@ -161,10 +169,15 @@ int determinaNumarNoduri(Nod * radacina) {
 	return nrNoduri;
 }
 
-int calculeazaInaltimeArbore(/*arbore de masini*/) {
+int calculeazaInaltimeArbore(Nod* arbore) {
 	//calculeaza inaltimea arborelui care este data de
 	//lungimea maxima de la radacina pana la cel mai indepartat nod frunza
-	return 0;
+    if(!arbore){
+        return 0;
+    }
+    int inaltimeStanga = calculeazaInaltimeArbore(arbore->st);
+    int inaltimeDreapta = calculeazaInaltimeArbore(arbore->dr);
+	return 1 + (inaltimeStanga>inaltimeDreapta ? inaltimeStanga : inaltimeDreapta);
 }
 
 float calculeazaPretTotal(/*arbore de masini*/) {
@@ -186,7 +199,10 @@ int main() {
 	printf("\nMasina gasita: ");
 	afisareMasina(getMasinaByID(rad, 6));
 	printf("\nnrnoduri:%d", determinaNumarNoduri(rad));
+    int rezultat = calculeazaInaltimeArbore(rad);
+    printf("\nInaltimea arborelui este: %d\n", rezultat);
 
-	//dezalocare
+
+    dezalocareArboreDeMasini(&rad);
 	return 0;
 }
